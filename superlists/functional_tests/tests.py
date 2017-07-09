@@ -1,10 +1,9 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-import unittest
-
+from django.test import LiveServerTestCase
 import time
 
-class NewVisitorTest(unittest.TestCase):
+class NewVisitorTest(LiveServerTestCase):
     def setUp(self):
         self.browser = webdriver.Firefox(executable_path=r'd:\Users\Z&B\PycharmProjects\geckodriver.exe')
         self.browser.implicitly_wait(3)
@@ -19,7 +18,7 @@ class NewVisitorTest(unittest.TestCase):
     def test_can_start_a_list_and_retrieve_it(self):
 
         # check homepage address
-        self.browser.get('http://localhost:8000')
+        self.browser.get(self.live_server_url)
         # check page title
         self.assertIn('To-Do', self.browser.title)
         header_text = self.browser.find_element_by_tag_name('h1').text
@@ -31,11 +30,10 @@ class NewVisitorTest(unittest.TestCase):
 
         # entered 'Buy peacock feathers' into text box
         inputbox.send_keys('Buy peacock feathers')
-
         # page updates on ENTER
         inputbox.send_keys(Keys.ENTER)
-        self.browser.implicitly_wait(1)
-       # time.sleep(10)
+
+        time.sleep(3)
 
         # now page lists '1. Buy peacock feathers'
         table = self.browser.find_element_by_id('id_list_table')
@@ -47,7 +45,7 @@ class NewVisitorTest(unittest.TestCase):
         # entered 'Use peacock feathers to make a fly'
         inputbox.send_keys('Use peacock feathers to make a fly')
         inputbox.send_keys(Keys.ENTER)
-        self.browser.implicitly_wait(1)
+        time.sleep(3)
         # page updates and shows two items
         table = self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
