@@ -56,14 +56,14 @@ class NewVisitorTest(LiveServerTestCase):
         self.browser = webdriver.Firefox(executable_path=r'..\..\geckodriver.exe')
         self.browser.get(self.live_server_url)
         page_text = self.browser.find_element_by_tag_name('body').text
-        self.assertNotIn('Buy peacock feathers',page_text)
+        self.assertNotIn('Buy peacock feathers', page_text)
         self.assertNotIn('Use peacock feathers to make a fly', page_text)
 
         #Bob (new user) starts new list by entering new item
         inputbox = self.browser.find_element_by_id('id_new_item')
         inputbox.send_keys('Buy milk')
         inputbox.send_keys(Keys.ENTER)
-
+        time.sleep(3)
         #Bob get own unique list URL
         bob_list_url = self.browser.current_url
         self.assertRegex(bob_list_url, '/lists/.+')
@@ -73,6 +73,7 @@ class NewVisitorTest(LiveServerTestCase):
         page_text = self.browser.find_element_by_tag_name('body').text
         self.assertNotIn('Buy peacock feathers', page_text)
         self.assertIn('Buy milk', page_text)
+        self.assertNotIn('Buy peacock feathers',page_text)
 
-        self.assertNotIn('Buy peacock feathers')
+
         self.fail('Finish the test')
